@@ -2,8 +2,7 @@
 
 ###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
 
-[<img src="https://img.youtube.com/vi/watch?v=nUsHQdB7eYU/maxresdefault.jpg" width="50%">](https://www.youtube.com/watch?v=nUsHQdB7eYU)
-
+[![Everything Is AWESOME](https://img.youtube.com/vi/StTqXEQ2l-Y/0.jpg)](https://www.youtube.com/watch?v=StTqXEQ2l-Y "Everything Is AWESOME")
 
 *This is version 1 of the web applicaiton*
 
