@@ -2,8 +2,7 @@
 
 ###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
 
-![gif]()
-
+[![Demo CountPages alpha](https://share.gifyoutube.com/KzB6Gb.gif)](https://www.youtube.com/watch?v=668nUCeBHyY)
 *This is version 1 of the web applicaiton*
 
 ## About the Web app. 
