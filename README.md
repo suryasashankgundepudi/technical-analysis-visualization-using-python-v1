@@ -2,7 +2,7 @@
 
 ###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
 
-![](https://www.investopedia.com/thmb/d6VF2gfx_W0UZC77q8RTZKFDsRc=/3711x2087/smart/filters:no_upscale()/dotdash_Final_Technical_Analysis_Strategies_for_Beginners_Sep_2020-01-2fd259fdcac044dd824d1b565e53b4e6.jpg)
+![gif]()
 
 *This is version 1 of the web applicaiton*
 
@@ -31,6 +31,8 @@ To use this one must follow the steps below
 
 
 For any suggestions please email me. 
+
+![](https://www.investopedia.com/thmb/d6VF2gfx_W0UZC77q8RTZKFDsRc=/3711x2087/smart/filters:no_upscale()/dotdash_Final_Technical_Analysis_Strategies_for_Beginners_Sep_2020-01-2fd259fdcac044dd824d1b565e53b4e6.jpg)
 
 ## Indicators as of Version 1 of the web application. 
 ```
