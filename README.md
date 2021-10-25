@@ -2,7 +2,7 @@
 
 ###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
 
-![gif](https://share.gifyoutube.com/KzB6Gb.gif)](https://www.youtube.com/watch?v=668nUCeBHyY)
+[<img src="https://img.youtube.com/vi/watch?v=nUsHQdB7eYU/maxresdefault.jpg" width="50%">](https://www.youtube.com/watch?v=nUsHQdB7eYU)
 
 
 *This is version 1 of the web applicaiton*
