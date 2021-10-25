@@ -1,6 +1,6 @@
 # Visualizing Technical Indicators Using Python and Plotly.
 
-###### The app is hosted on Heroku and can be found here 
+###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
 
 ![](https://www.investopedia.com/thmb/d6VF2gfx_W0UZC77q8RTZKFDsRc=/3711x2087/smart/filters:no_upscale()/dotdash_Final_Technical_Analysis_Strategies_for_Beginners_Sep_2020-01-2fd259fdcac044dd824d1b565e53b4e6.jpg)
 
@@ -12,6 +12,12 @@ With this web applicaiton I aim to provide a free open source method for people 
 People can use this applicaiton to select various technical indicators and then visualize and interact with them. This can help new financial engineers get a better understanding of how various parameters of a technical indicator will affect the way we execute trades. It uses the technical analysis library available for python and Plotly's interactive visualization tools to provide the user with a dynamically changing and interactive tool. 
 
 Since this is just version 1 of the application I am yet to fix a lot of bugs and improve on it. So do bear with some of the little nuances. In case you would like to send any suggestions please email me at [sashanksurya9wj@gmail.com](sashanksurya9wj@gmail.com).
+
+### Some features
+1. Interactive visualization
+2. Dynamically changing environment
+3. Users can look up the indicator with the link provided
+4. Any stock across yahoo finance is available
 
 ## Tutorial on how to use the application.
 To use this one must follow the steps below
