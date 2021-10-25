@@ -2,7 +2,9 @@
 
 ###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
 
-[![Everything Is AWESOME](https://img.youtube.com/vi/StTqXEQ2l-Y/0.jpg)](https://www.youtube.com/watch?v=StTqXEQ2l-Y "Everything Is AWESOME")
+Please refer to the demo video below to understand how it works. (No audio available for the damo)
+
+[![Demo VIDEO](https://img.youtube.com/vi/nUsHQdB7eYU/0.jpg)](https://www.youtube.com/watch?v=nUsHQdB7eYU)
 
 *This is version 1 of the web applicaiton*
 
