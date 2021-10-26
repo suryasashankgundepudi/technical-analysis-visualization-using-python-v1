@@ -1,12 +1,21 @@
 # Visualizing Technical Indicators Using Python and Plotly.
 
-###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. 
-
+###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Any updates will be here
+#### DEMO
 
 
 ![gif](assets/TECH-ANALYSIS-DEMO.gif)
 
 *This is version 1 of the web application*
+## Table of contents
+1. [About the Web app.](#About-the-Web-app.)
+2. [Tutorial on how to use the application](#Tutorial-on-how-to-use-the-application)
+3. [Inputs required from the user](#Inputs-required-from-the-user)
+4. [Returns to user](#Returns)
+5. [Indicators Available](#Indicators-as-of-Version-1-of-the-web-application.)
+6. [Requirements](#Requirements)
+7. [Updates](#Updates)
+
 
 ## About the Web app. 
 
@@ -122,6 +131,15 @@ For any suggestions please email me.
 To install these please use: 
 
 `pip install -r requirements.txt`
+
+
+### Updates
+1. **Updates on 26th October 2021**
+  1. Added functionality to change the type of plot along with the indicator
+    1. Added Candlestick plots
+    2. Added Closing price plot
+    3. Added open price plot
+  2. Changed the initial starting and ending date to be 2 years long so that it isn't resource heavy at the beginning
 
 
 **This web application is made for academic purposes only**
