@@ -2,16 +2,16 @@
 
 ###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
 
-Please refer to the demo video below to understand how it works. (No audio available for the damo)
+Please refer to the demo video below to understand how it works. (No audio available for the demo)
 
 [![Demo VIDEO](https://img.youtube.com/vi/nUsHQdB7eYU/0.jpg)](https://www.youtube.com/watch?v=nUsHQdB7eYU)
 
-*This is version 1 of the web applicaiton*
+*This is version 1 of the web application*
 
 ## About the Web app. 
 
-With this web applicaiton I aim to provide a free open source method for people to visualize and understand various technical indicators. 
-People can use this applicaiton to select various technical indicators and then visualize and interact with them. This can help new financial engineers get a better understanding of how various parameters of a technical indicator will affect the way we execute trades. It uses the technical analysis library available for python and Plotly's interactive visualization tools to provide the user with a dynamically changing and interactive tool. 
+With this web application I aim to provide a free open source method for people to visualize and understand various technical indicators. 
+People can use this application to select various technical indicators and then visualize and interact with them. This can help new financial engineers get a better understanding of how various parameters of a technical indicator will affect the way we execute trades. It uses the technical analysis library available for python and Plotly's interactive visualization tools to provide the user with a dynamically changing and interactive tool. 
 
 Since this is just version 1 of the application I am yet to fix a lot of bugs and improve on it. So do bear with some of the little nuances. In case you would like to send any suggestions please email me at [sashanksurya9wj@gmail.com](sashanksurya9wj@gmail.com).
 
@@ -23,10 +23,10 @@ Since this is just version 1 of the application I am yet to fix a lot of bugs an
 
 ## Tutorial on how to use the application.
 To use this one must follow the steps below
-1. Open the web applicaiton in your browser
+1. Open the web application in your browser
 2. Open Yahoo finance and search for the stock for which you wish to plot the indicator for
 3. Copy the ticker value for the stock from Yahoo FInance
-4. Paste it in the input box of the applicaiton
+4. Paste it in the input box of the application
 5. Select the indicator.
 6. Select the date range and other input parameters based on the indicator
 7. In case you would like to learn more about the indicator click on the link that says "TO learn more about current indicator please click here"
@@ -51,7 +51,7 @@ For any suggestions please email me.
 11. Ease of Movement
 12. Exponential Moving Average
 13. Ichimoku Kinkō Hyō (Ichimoku)
-14. Kaufman’s Adaptive Moving Average', 'value': 'KAMA'},
+14. Kaufman’s Adaptive Moving Average
 15. Kelter Channel Index
 16. Money Flow index
 17. MACD
