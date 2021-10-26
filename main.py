@@ -1,15 +1,22 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[4]:
 
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import plotly.express as px
 import yfinance as yf
 import pandas as pd
 import dash
 import ta
 import dash_bootstrap_components as dbc
-import os
+import plotly.graph_objects as go
 
+
+from ta import add_all_ta_features
 from ta.trend import sma_indicator
 from ta.trend import ema_indicator
 from ta import momentum
@@ -24,16 +31,20 @@ from dash.dependencies import Input, Output
 from dash import html
 from dash import dcc
 from datetime import date
-
-
+from datetime import datetime as dt
+import colorlover as cl
 
 
 df = pd.DataFrame()
 app = dash.Dash(external_stylesheets=[dbc.themes.SPACELAB])
-server = app.server
+
+colorscale = cl.scales['9']['qual']['Paired']
 
 
-# In[2]:
+# In[5]:
+
+
+
 
 
 # DECIDING THE APP LAYOUT    
@@ -87,8 +98,11 @@ app.layout = html.Div(
                        style = {"margin-left": "20px"}),
                 
                 # TEXT FOR START AND END DATE
-                dbc.Col((html.Div(children='''Enter the START DATE and END DATE''')), align = 'end', 
+                dbc.Col((html.Div(children='''Enter the START DATE and END DATE''')), align = 'center', 
                        style = {"margin-left": "100px"}), 
+                
+                dbc.Col((html.Div(children = '''Select what kind of graph you would like along with indicator''')), 
+                       align = 'center', style = {"margin-right" : '100px'})
                 
             ],
             align="start",
@@ -104,11 +118,30 @@ app.layout = html.Div(
                 # INPUT FOR DATE RANGE 
                 dbc.Col((dcc.DatePickerRange(
                     id='my-date-picker-range',
-                    min_date_allowed=date(2005, 1, 1),
-                    max_date_allowed=date(2020, 12, 31),
-                    initial_visible_month=date(2018, 1, 1)  
+                    start_date=date(2018, 1, 1), 
+                    end_date = date(2019, 12, 31), 
+                    min_date_allowed=date(2003, 1, 1),
+                    max_date_allowed=date(2020, 12, 31), 
+                    initial_visible_month= date(2018, 1, 12), 
+                    start_date_placeholder_text= date(2018, 1, 1),
+                    end_date_placeholder_text= date(2019, 12, 31)
                 )), align = 'end', 
-                       style = {"margin-left": "100px", 'border-radius': 10})]
+                       style = {"margin-left": "100px", 'border-radius': 10}), 
+                
+                # INPUT FOR TYPE OF GRAPH
+                dbc.Col((dcc.Dropdown(
+                    id='graphtypeselect',
+                    options = [
+                        {'label' : "CandleStick Chart", 'value' : "candle"}, 
+                        {'label' : "Open of Stock", "value" : "open"}, 
+                        {'label' : "Close of Stock", "value" : "close"}
+                        
+                    ], 
+                    value = 'candle'
+                )), align = 'end', 
+                       style = {"margin-right": "40px", 'border-radius': 10})
+                
+            ]
         ), 
         html.Br(), 
         html.Br(), 
@@ -156,6 +189,7 @@ app.layout = html.Div(
                 dbc.Col((dcc.Dropdown(
                     id='indicator',
                     options = [
+                        {'label' : "Stock Only", 'value' : "PLAIN"}, 
                         {'label' : "Accumulation/Distribution Index", 'value' : "ACCDI"}, 
                         {'label' : 'Aroon Indicator', 'value' : 'AROON'},
                         {'label' : "Average Directional index", 'value' : 'ADX'}, 
@@ -185,7 +219,7 @@ app.layout = html.Div(
                        
                         
                     ], 
-                    value = 'Simple Moving Average'
+                    value = 'PLAIN'
                 )), align = 'end', 
                        style = {"margin-right": "40px", 'border-radius': 10})]
         ),
@@ -201,21 +235,47 @@ app.layout = html.Div(
     Input('indicator', 'value'),
     Input('input-window', 'value'), 
     Input('input-window-long', 'value'), 
-    Input('input-window-signal', 'value'), 
+    Input('input-window-signal', 'value'),
+    Input("graphtypeselect", "value"), 
     Input('my-date-picker-range', 'start_date'),
     Input('my-date-picker-range', 'end_date'))
 
-def update_output(input1, indicator_1, window_input, window_input_long, signal_input, start_date, end_date):
+def update_output(input1, indicator_1, window_input, window_input_long, signal_input, graphtype, start_date, end_date):
     # DOWNLOADING THE DATA FROM YAHOO FINANCE
     df = yf.download(input1, start_date,end_date)
     # SAVING ONLY THE NECESSARY VALUES INTO STOCK
     Stock = pd.DataFrame({
         "Date" : df.index, 
         "Close" : df["Close"],
+        "Open" : df["Open"], 
         "High" : df["High"],
         "Low" : df["Low"], 
         "Volume" : df["Volume"]
     })
+    
+    Stock.set_index("Date")
+    if graphtype == "candle": 
+        add_trace_graph = go.Candlestick(x = Stock["Date"], 
+                                         open=Stock["Open"],
+                                         high=Stock['High'],
+                                         low=Stock['Low'],
+                                         close=Stock['Close'], name = input1)
+        
+    if graphtype == "close": 
+        add_trace_graph = {'x' : Stock["Date"], 'y' : Stock["Close"], 'type' : 'scatter', 'name' : 'Close'}
+    if graphtype == "open":
+        add_trace_graph = {'x' : Stock["Date"], 'y' : Stock["Open"], 'type' : 'scatter', 'name' : 'Open'}
+    
+    
+    
+    
+    # ACCUMALATION DISTRIBUTION INDEX
+    if indicator_1 == "PLAIN": 
+        fig = go.Figure()
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
+        fig.update_layout(transition_duration=500)
+        return fig
     
     
     # ACCUMALATION DISTRIBUTION INDEX
@@ -257,6 +317,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["Awesome Oscillator"] = awesome_oscillator(Stock["High"], Stock["Low"], window1=window_input, 
                                                          window2=window_input_long)
         fig = px.line(Stock[["Awesome Oscillator"]], title='Awesome Indicator')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -267,6 +328,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["Average True Range"] = volatility.average_true_range(high = Stock["High"], low = Stock["Low"], 
                                                            close = Stock["Close"], window=window_input)
         fig = px.line(Stock[["Average True Range"]], title='Average True Range')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -277,7 +339,10 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["HIGH BAND"] = bollinger_hband(Stock["Close"], window = window_input, window_dev = 2)
         Stock["LOW BAND"] = bollinger_lband(Stock["Close"], window = window_input, window_dev = 2)
         Stock["MID BAND"] = bollinger_mavg(Stock["Close"], window = window_input)        
-        fig = px.line(Stock[["Close", "HIGH BAND", "LOW BAND", "MID BAND"]], title='Close and Bollinger Bands')
+        #fig = px.line(Stock[["Close", "HIGH BAND", "LOW BAND", "MID BAND"]], title='Close and Bollinger Bands')
+        fig = px.line(Stock[["HIGH BAND", "LOW BAND", "MID BAND"]], title='Close and Bollinger Bands')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -290,6 +355,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
                                                                close = Stock["Close"], volume = Stock["Volume"], 
                                                                window = window_input)       
         fig = px.line(Stock[["Chaikin Money Flow"]], title='Chaikin Indicator')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -299,7 +365,9 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     elif indicator_1 == "CCI": 
         Stock["CCI"] = trend.cci(high = Stock["High"], low = Stock["Low"], 
                                                            close = Stock["Close"], window=window_input)
-        fig = px.line(Stock[["Close", "CCI"]], title='Close VS Commodity Chanel Index')
+        fig = px.line(Stock["CCI"], title='Close VS Commodity Chanel Index')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -310,6 +378,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     elif indicator_1 == "CUMRET": 
         Stock["Cummilative Return"] = ta.others.cumulative_return(Stock['Close'])
         fig = px.line(Stock[["Cummilative Return"]], title='Cummilative Return')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -319,6 +388,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     elif indicator_1 == "DRET": 
         Stock["Daily Return"] = ta.others.daily_return(Stock['Close'])
         fig = px.line(Stock[["Daily Return"]], title='Daily Return')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -332,7 +402,9 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
                                                                close = Stock["Close"], window = window_input)
         Stock["MID BAND"] = volatility.donchian_channel_mband(high = Stock["High"], low = Stock["Low"], 
                                                                close = Stock["Close"], window = window_input)        
-        fig = px.line(Stock[["Close", "HIGH BAND", "LOW BAND", "MID BAND"]], title='Close and Donchian Channel Bands')
+        fig = px.line(Stock[["HIGH BAND", "LOW BAND", "MID BAND"]], title='Close and Donchian Channel Bands')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -343,6 +415,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["Ease of Movement"] = volume.ease_of_movement(high = Stock["High"], low = Stock["Low"],
                                                             volume = Stock["Volume"], window = window_input)       
         fig = px.line(Stock[["Ease of Movement"]], title='Ease of Movement')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -351,7 +424,9 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     # EXPONENTIAL MOVING AVERAGE
     elif indicator_1 == "Exponential Moving Average": 
         Stock["EMA"] = ema_indicator(Stock["Close"], window = window_input)
-        fig = px.line(Stock[["Close", "EMA"]], title='Close VS Exponential Moving Average')
+        fig = px.line(Stock["EMA"], title='Close VS Exponential Moving Average')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -372,9 +447,11 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["Tenkan Sen (Conversion Line)"] = trend.ichimoku_conversion_line(high = Stock["High"], low = Stock["Low"], 
                                                                              window1 = window_input, 
                                                                              window2 = window_input_long)       
-        fig = px.line(Stock[["Close", "Senkou Span A", "Senkou Span B", "Kiju Sen (Base Line)", 
+        fig = px.line(Stock[["Senkou Span A", "Senkou Span B", "Kiju Sen (Base Line)", 
                              "Tenkan Sen (Conversion Line)"]], 
                       title='Close and Ichimoku')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -383,7 +460,9 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     # KAUFMAN'S ADAPTIVE MOVING AVERAGE
     elif indicator_1 == "KAMA":
         Stock["KAMA"] = momentum.kama(Stock["Close"], window = window_input)
-        fig = px.line(Stock[["Close", "KAMA"]], title='Close VS KAMA')
+        fig = px.line(Stock["KAMA"], title='Close VS KAMA')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -399,7 +478,9 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["MID BAND"] = volatility.keltner_channel_mband(Stock['High'], Stock['Low'], 
                                                               Stock["Close"], window = window_input, 
                                                              window_atr=window_input_long)        
-        fig = px.line(Stock[["Close", "HIGH BAND", "LOW BAND", "MID BAND"]], title='Close and Keltner Indicator')
+        fig = px.line(Stock[["HIGH BAND", "LOW BAND", "MID BAND"]], title='Close and Keltner Indicator')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -411,6 +492,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
                                                                close = Stock["Close"], volume = Stock["Volume"], 
                                                                window = window_input)       
         fig = px.line(Stock["MFI"], title='MONEY FLOW INDEX')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -423,13 +505,16 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["MACD SIGNAL"] = trend.macd_signal(Stock["Close"], window_slow = window_input_long, 
                                    window_fast=window_input, window_sign= signal_input)
         fig = px.line(Stock[["MACD", "MACD SIGNAL"]], title='MACD AND MACD SIGNAL')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
     # NEGATIVE VOLUME INDEX INDICATOR
     elif indicator_1 == "NVII": 
         Stock["NVII"] = volume.negative_volume_index(close = Stock["Close"], volume = Stock["Volume"])       
-        fig = px.line(Stock[["Close", "NVII"]], title='Close and Negative Volume Index Indicator')
+        fig = px.line(Stock["NVII"], title='Close and Negative Volume Index Indicator')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -439,6 +524,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["PPO"] = momentum.ppo(Stock["Close"], window_slow = window_input_long, 
                                    window_fast=window_input, window_sign= signal_input)
         fig = px.line(Stock[["PPO"]], title='PPO')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -451,6 +537,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["SIGNAL"] = momentum.pvo(Stock["Close"], window_slow = window_input_long, 
                                    window_fast=window_input, window_sign= signal_input)
         fig = px.line(Stock[["PVO", "SIGNAL"]], title='PVO VS PVO SIGNAL')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -460,6 +547,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     elif indicator_1 == "Rate of Change":
         Stock["ROC"] = momentum.roc(Stock["Close"], window=window_input)
         fig = px.line(Stock["ROC"], title='RATE OF CHANGE')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -469,6 +557,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     elif indicator_1 == "Relative Strength Index":
         Stock["RSI"] = momentum.rsi(Stock["Close"], window = window_input)
         fig = px.line(Stock[["RSI"]], title='Relative Strength Index')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -477,7 +566,9 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     # SIMPLE MOVING AVERAGE
     elif indicator_1 == "Simple Moving Average":
         Stock["MA"] = sma_indicator(Stock["Close"], window = window_input)
-        fig = px.line(Stock[["Close", "MA"]], title='Close VS Simple Moving Average')
+        fig = px.line(Stock["MA"], title='Close VS Simple Moving Average')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -485,7 +576,8 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     # ULCER INDEX
     elif indicator_1 == "ULCI":
         Stock["ULCI"] = volatility.ulcer_index(Stock["Close"], window = window_input)
-        fig = px.line(Stock[["ULCI"]], title='Ulcer Index')
+        fig = px.line(Stock["ULCI"], title='Ulcer Index')
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -496,7 +588,10 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         Stock["VWAP"] = volume.volume_weighted_average_price(high = Stock["High"], low = Stock["Low"], 
                                                                close = Stock["Close"], volume = Stock["Volume"], 
                                                                window = window_input)
-        fig = px.line(Stock[["Close", "VWAP"]], title='Close VS Volume Weighter Average Price')
+        fig = px.line(Stock["VWAP"]
+                      , title='Close VS Volume Weighter Average Price')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
     
@@ -505,7 +600,9 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     # VOLUME WEIGHTED AVERAGE PRICE
     elif indicator_1 == "WMA":
         Stock["WMA"] = trend.wma_indicator(close = Stock["Close"], window = window_input)
-        fig = px.line(Stock[["Close", "WMA"]], title='Close VS Weighted Moving Average')
+        fig = px.line(Stock["WMA"], title='Close VS Weighted Moving Average')
+        fig.add_trace(add_trace_graph)
+        fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
 
@@ -628,10 +725,16 @@ def update_link(indicator_1):
         url = "https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/weighted-moving-average-wma/"
         return url
 
-# In[3]:
+
+# In[6]:
 
 
 if __name__ == '__main__':
     app.run_server()
 
+
 # In[ ]:
+
+
+
+
