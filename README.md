@@ -15,6 +15,7 @@
 5. [Indicators Available](#Indicators-as-of-Version-1-of-the-web-application.)
 6. [Requirements](#Requirements)
 7. [Updates](#Updates)
+8. [Updates you can expect](#Updatates-you-can-expect)
 
 
 ## About the Web app. 
@@ -142,6 +143,12 @@ To install these please use:
   2. Changed the initial starting and ending date to be 2 years long so that it isn't resource heavy at the beginning
 
 
+# Updatates you can expect 
+(If an update that I wanted to include is completed it will be striked through. 
+1. ~~Include functionality for candlestick, close and open graphs~~
+2. Moving averages will include small and long average graphs for better analysis. 
+
+**PLEASE EMAIL ME FOR SUGGESTIONS OR TO COLLABORATE WITH ME**
 **This web application is made for academic purposes only**
 
 
