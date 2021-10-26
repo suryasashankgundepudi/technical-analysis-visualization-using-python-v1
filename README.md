@@ -76,6 +76,52 @@ For any suggestions please email me.
 26. Weighted Moving Average
 ```
 
+## Requirements
+1. Brotli==1.0.9
+2. certifi==2021.10.8
+3. charset-normalizer==2.0.7
+4. click==8.0.3
+5. colorama==0.4.4
+6. cycler==0.10.0
+7. dash==2.0.0
+8. dash-bootstrap-components==1.0.0
+9. dash-core-components==2.0.0
+10. dash-html-components==2.0.0
+11. dash-table==5.0.0
+12. DateTime==4.3
+13. Flask==2.0.2
+14. Flask-Compress==1.10.1
+15. gunzcorn==20.1.0
+16. idna==3.3
+17. itsdangerous==2.0.1
+18. Jinja2==3.0.2
+19. kiwisolver==1.3.2
+20. lxml==4.6.3
+21. MarkupSafe==2.0.1
+22. matplotlib==3.4.3
+23. multitasking==0.0.9
+24. numpy==1.21.3
+25. pandas==1.3.4
+26. Pillow==8.4.0
+27. plotly==5.3.1
+28. pyparsing==3.0.1
+29. python-dateutil==2.8.2
+30. pytz==2021.3
+31. requests==2.26.0
+32. six==1.16.0
+33. ta==0.7.0
+34. tenacity==8.0.1
+35. urllib3==1.26.7
+36. Werkzeug==2.0.2
+37. wincertstore==0.2
+38. yfinance==0.1.64
+39. zope.interface==5.4.0
+
+To install these please use
+
+`pip install -r requirements.txt`
+
+
 **This web application is made for academic purposes only**
 
 
