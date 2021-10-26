@@ -144,7 +144,7 @@ To install these please use:
 
 
 # Updatates you can expect 
-(If an update that I wanted to include is completed it will be striked through. 
+If an update that I wanted to include is completed it will be striked through. 
 1. ~~Include functionality for candlestick, close and open graphs~~
 2. Moving averages will include small and long average graphs for better analysis. 
 
