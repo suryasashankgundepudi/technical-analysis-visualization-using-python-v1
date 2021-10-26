@@ -136,11 +136,11 @@ To install these please use:
 
 ### Updates
 1. **Updates on 26th October 2021**
-  1. Added functionality to change the type of plot along with the indicator
-    1. Added Candlestick plots
-    2. Added Closing price plot
-    3. Added open price plot
-  2. Changed the initial starting and ending date to be 2 years long so that it isn't resource heavy at the beginning
+    1. Added functionality to change the type of plot along with the indicator
+        1. Added Candlestick plots
+        2. Added Closing price plot
+        3. Added open price plot
+    2. Changed the initial starting and ending date to be 2 years long so that it isn't resource heavy at the beginning
 
 
 # Updatates you can expect 
