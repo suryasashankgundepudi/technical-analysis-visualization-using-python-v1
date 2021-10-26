@@ -77,6 +77,7 @@ For any suggestions please email me.
 ```
 
 ## Requirements
+```
 1. Brotli==1.0.9
 2. certifi==2021.10.8
 3. charset-normalizer==2.0.7
@@ -116,8 +117,9 @@ For any suggestions please email me.
 37. wincertstore==0.2
 38. yfinance==0.1.64
 39. zope.interface==5.4.0
+```
 
-To install these please use
+To install these please use: 
 
 `pip install -r requirements.txt`
 
