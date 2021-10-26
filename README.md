@@ -1,10 +1,10 @@
 # Visualizing Technical Indicators Using Python and Plotly.
 
-###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. Until then please check the demo below. 
+###### Currently facing issues hosting the application on heroku. As soon as I am able to I'll like the live application here. 
 
-Please refer to the demo video below to understand how it works. (No audio available for the demo)
 
-[![Demo VIDEO](https://img.youtube.com/vi/nUsHQdB7eYU/0.jpg)](https://www.youtube.com/watch?v=nUsHQdB7eYU)
+
+![gif](assets/TECH-ANALYSIS-DEMO.gif)
 
 *This is version 1 of the web application*
 
@@ -15,11 +15,7 @@ People can use this application to select various technical indicators and then 
 
 Since this is just version 1 of the application I am yet to fix a lot of bugs and improve on it. So do bear with some of the little nuances. In case you would like to send any suggestions please email me at [sashanksurya9wj@gmail.com](sashanksurya9wj@gmail.com).
 
-### Some features
-1. Interactive visualization
-2. Dynamically changing environment
-3. Users can look up the indicator with the link provided
-4. Any stock across yahoo finance is available
+
 
 ## Tutorial on how to use the application.
 To use this one must follow the steps below
@@ -30,6 +26,20 @@ To use this one must follow the steps below
 5. Select the indicator.
 6. Select the date range and other input parameters based on the indicator
 7. In case you would like to learn more about the indicator click on the link that says "TO learn more about current indicator please click here"
+
+## Inputs required from the user
+1. Ticker of Stock
+2. Start Date
+3. End Date
+4. Short Window (or Window 1)
+5. Long Window (or Window 2)
+6. Signal Window (or Window 3/Window Atr)
+7. Indicator to be Visualized
+
+## Returns
+1. Link to the current indicator for people to refer to
+2. Interactive visualization of the current inidcator for set parameters
+3. Dynamically Changing Environment
 
 
 For any suggestions please email me. 
