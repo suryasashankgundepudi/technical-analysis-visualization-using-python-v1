@@ -148,6 +148,7 @@ If an update that I wanted to include is completed it will be striked through.
 1. ~~Include functionality for candlestick, close and open graphs~~
 2. Moving averages will include small and long average graphs for better analysis. 
 3. Return the cummilative return, if people executed trades purely based on the indicators.
+4. Compare Multiple stocks 
 
 **PLEASE EMAIL ME FOR SUGGESTIONS OR TO COLLABORATE WITH ME**
 **This web application is made for academic purposes only**
