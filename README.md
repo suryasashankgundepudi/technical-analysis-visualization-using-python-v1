@@ -150,6 +150,10 @@ If an update that I wanted to include is completed it will be striked through.
 3. Return the cummilative return, if people executed trades purely based on the indicators.
 4. Compare Multiple stocks 
 
+
+### Notes:
+Though it has dependencies on the ta library, aiming to use my own developed code for technical analysis. 
+
 **PLEASE EMAIL ME FOR SUGGESTIONS OR TO COLLABORATE WITH ME**
 **This web application is made for academic purposes only**
 
