@@ -1,32 +1,27 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[4]:
-
-
+# Importing Necessary Libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import plotly.express as px
 import yfinance as yf
-import pandas as pd
 import dash
 import ta
-import dash_bootstrap_components as dbc
+import plotly.express as px
 import plotly.graph_objects as go
+import dash_bootstrap_components as dbc
 
 
 from ta import add_all_ta_features
+from ta import trend
+from ta import volume
+from ta import momentum
+from ta import volatility
 from ta.trend import sma_indicator
 from ta.trend import ema_indicator
-from ta import momentum
-from ta import trend
-from ta import volatility
-from ta import volume
 from ta.momentum import awesome_oscillator
 from ta.volatility import bollinger_hband
 from ta.volatility import bollinger_lband
 from ta.volatility import bollinger_mavg
+
 from dash.dependencies import Input, Output
 from dash import html
 from dash import dcc
@@ -35,37 +30,52 @@ from datetime import datetime as dt
 import colorlover as cl
 
 
+
+# Creating an empty dataframe for later use. 
+
 df = pd.DataFrame()
+
+
+# Calling the application with the SpaceLabs theme
 app = dash.Dash(external_stylesheets=[dbc.themes.SPACELAB])
 
+# Defining Colorscales for the candlestick sharts
 colorscale = cl.scales['9']['qual']['Paired']
 
 
-# In[5]:
 
+################################################################################
+#                                                                              #
+#                          APP LAYOUT STARTS HERE                              #
+#                                                                              #
+################################################################################
 
-
-
-
-# DECIDING THE APP LAYOUT    
 app.layout = html.Div(
     [
+        
         # TITLE  
         html.H3(children = "Visualizing Technical Indicators Using Python and Plotly. - By Surya Sashank Gundepudi", 
                style = {
                    'textAlign' : 'center'
                }), 
+        
+        
         # NOTE
         html.Div(children='''(This is for educational purposes only)''', 
                style = {
                    'textAlign' : 'center', 
                }), 
+        
+        
         # LINK FOR TUTORIAL
         html.Div(children=[html.A('SEARCH FOR TUTORIAL AND SOURCE AT GITHUB', 
-                                  href='https://github.com/suryasashankgundepudi', target='_blank')], 
+                                  href='https://github.com/suryasashankgundepudi/technical-analysis-visualization-using-python-v1/blob/main/README.md', 
+                                  target='_blank')], 
                style = {
                    'textAlign' : 'center', 
                }),
+        
+        
         # LINK FOR TECHNICAL ANALYSIS LIBRARY DOCUMENTATION
         html.Div(children=[html.A("""UNDERSTAND WHICH PARAMETERS ARE NEEDED PLEASE GO HERE. 
         IF PARAMETERS ARE MISSING DEFAULT VALUES ARE TAKEN""", 
@@ -74,6 +84,8 @@ app.layout = html.Div(
                style = {
                    'textAlign' : 'center', 
                }), 
+        
+        
         #LINK FOR CURRENT INDICATOR
         html.Div(children=[html.A('LEARN MORE ABOUT CURRENT INDICATOR HERE', 
                                   href='https://www.investopedia.com/terms/s/sma.asp', 
@@ -97,16 +109,22 @@ app.layout = html.Div(
                         align = 'start', 
                        style = {"margin-left": "20px"}),
                 
+                
                 # TEXT FOR START AND END DATE
                 dbc.Col((html.Div(children='''Enter the START DATE and END DATE''')), align = 'center', 
                        style = {"margin-left": "100px"}), 
                 
+                
                 dbc.Col((html.Div(children = '''Select what kind of graph you would like along with indicator''')), 
                        align = 'center', style = {"margin-right" : '100px'})
+                
+                # ROW 1 ENDS HERE 
                 
             ],
             align="start",
         ),
+        
+        
         
         # THE SECOND ROW AS SEEN IN THE APPLICATION
         dbc.Row(
@@ -114,6 +132,7 @@ app.layout = html.Div(
                 # INPUT FOR TICKER VALUE
                 dbc.Col((dcc.Input(id="input-1", type="text", value="AMZN")), align = 'start', 
                        style = {"margin-left": "20px", 'border-radius': 10}),
+                
                 
                 # INPUT FOR DATE RANGE 
                 dbc.Col((dcc.DatePickerRange(
@@ -128,6 +147,8 @@ app.layout = html.Div(
                 )), align = 'end', 
                        style = {"margin-left": "100px", 'border-radius': 10}), 
                 
+                
+                
                 # INPUT FOR TYPE OF GRAPH
                 dbc.Col((dcc.Dropdown(
                     id='graphtypeselect',
@@ -141,10 +162,17 @@ app.layout = html.Div(
                 )), align = 'end', 
                        style = {"margin-right": "40px", 'border-radius': 10})
                 
+                # ROW ENDS HERE
+            
+                
             ]
         ), 
+        
+        
         html.Br(), 
         html.Br(), 
+        
+        
         
         # THE THIRD ROW AS SEEN IN THE APPLICATION
         dbc.Row(
@@ -153,14 +181,17 @@ app.layout = html.Div(
                 dbc.Col( html.Div(children='''Enter the Short Window Length'''), align = 'start', 
                        style = {"margin-left": "20px"}),
                 
+                
                 # TEXT FOR LONG WINDOW LENGTH 
                 dbc.Col( html.Div(children='''Enter the Long Window Length (if indicator requires only one 
                 window it will take the first one)'''),
                         align = 'center'),
                 
+                
                 #TEXT FOR SIGNAL WINDOW
                 dbc.Col( html.Div(children='''Enter the signal Window (if indicator requires only one 
                 window length it will take the first value)''')), 
+                
                 
                 # TEXT FOR TYPE OF INDICATOR
                 dbc.Col((html.Div(children='''Select the Type of Indicator''')), align = 'end', 
@@ -170,6 +201,8 @@ app.layout = html.Div(
             align="start",
         ),
         
+        
+        
         # THE FOURTH ROW AS SEEN IN THE APPLICATION
         dbc.Row(
             [
@@ -177,13 +210,16 @@ app.layout = html.Div(
                 dbc.Col((dcc.Input(id="input-window", type="number", value=12)), align = 'start', 
                        style = {"margin-left": "20px", 'border-radius': 10}),
                 
+                
                 # INPUT VALUE FOR LONG WINDOW LENGTH 
                 dbc.Col((dcc.Input(id="input-window-long", type="number", value=26,
                        style = {'border-radius': 10})), align = 'center'),
                 
+                
                 # INPUT VALUE FOR LONG WINDOW LENGTH 
                 dbc.Col((dcc.Input(id="input-window-signal", type="number", value=9,
                        style = {'border-radius': 10}))),
+                
                 
                 # INPUT VALUE FOR INDICATOR 
                 dbc.Col((dcc.Dropdown(
@@ -216,7 +252,8 @@ app.layout = html.Div(
                         {'label': 'Ulcer Index', 'value' : 'ULCI'},
                         {'label' : 'Volume Weighted Average Price', 'value' : "VWAP"}, 
                         {'label' : 'Weighted Moving Average', 'value': 'WMA'}
-                       
+                
+                        
                         
                     ], 
                     value = 'PLAIN'
@@ -229,6 +266,10 @@ app.layout = html.Div(
         
     ])
 
+
+
+
+# USING THE INPUTS FROM THE APP TO UPDATE THE GRAPH. CURRENT CALLBACK UPDATES THE GRAP
 @app.callback(
     Output('GRAPH', 'figure'),
     Input("input-1", "value"),
@@ -239,11 +280,12 @@ app.layout = html.Div(
     Input("graphtypeselect", "value"), 
     Input('my-date-picker-range', 'start_date'),
     Input('my-date-picker-range', 'end_date'))
-
 def update_output(input1, indicator_1, window_input, window_input_long, signal_input, graphtype, start_date, end_date):
-    # DOWNLOADING THE DATA FROM YAHOO FINANCE
+    # DOWNLOADING THE DATA FROM YAHOO FINANCE USING THE FIRST INPUT 
     df = yf.download(input1, start_date,end_date)
-    # SAVING ONLY THE NECESSARY VALUES INTO STOCK
+    
+    
+    # SAVING ONLY THE NECESSARY VALUES INTO DATAFRAME NAMED STOCK 
     Stock = pd.DataFrame({
         "Date" : df.index, 
         "Close" : df["Close"],
@@ -253,7 +295,10 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         "Volume" : df["Volume"]
     })
     
+    # SETTING THE INDEX OF STOCK AS THE DATES OF THE DATAFRAME
     Stock.set_index("Date")
+    
+    # SECOND CALLBACK FOR THE TYPE OF GRAPH TO BY PLOTTED 
     if graphtype == "candle": 
         add_trace_graph = go.Candlestick(x = Stock["Date"], 
                                          open=Stock["Open"],
@@ -418,6 +463,7 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
         fig.update_yaxes(fixedrange=False)
         fig.update_layout(transition_duration=500)
         return fig
+    
     
     
     
@@ -597,7 +643,6 @@ def update_output(input1, indicator_1, window_input, window_input_long, signal_i
     
     
     # WEIGHTED MOVING AVERAGE
-    # VOLUME WEIGHTED AVERAGE PRICE
     elif indicator_1 == "WMA":
         Stock["WMA"] = trend.wma_indicator(close = Stock["Close"], window = window_input)
         fig = px.line(Stock["WMA"], title='Close VS Weighted Moving Average')
@@ -669,7 +714,7 @@ def update_link(indicator_1):
     elif indicator_1 == "ICHIMOKU": 
         url = """https://school.stockcharts.com/doku.php?id=technical_indicators:ichimoku_cloud"""
         return url
-    elif indicator_1 == "Kaufman’s Adaptive Moving Average": 
+    elif indicator_1 == "KAMA": 
         url = "https://www.tradingview.com/ideas/kama/"
         return url
     
@@ -683,7 +728,7 @@ def update_link(indicator_1):
         return url
     
     
-    elif indicator_1 == "MFI": 
+    elif indicator_1 == "MACD": 
         url = """https://technical-analysis-library-in-python.readthedocs.io/en/latest/ta.html#ta.trend.MACD"""
         return url
     
