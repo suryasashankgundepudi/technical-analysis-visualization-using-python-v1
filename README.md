@@ -12,7 +12,7 @@
 2. [Tutorial on how to use the application](#Tutorial-on-how-to-use-the-application)
 3. [Inputs required from the user](#Inputs-required-from-the-user)
 4. [Returns to user](#Returns)
-5. [Indicators Available](#Indicators-as-of-Version-1-of-the-web-application.)
+5. [Indicators Available](#Indicators-as-of-Version-1-of-the-web-application)
 6. [Requirements](#Requirements)
 7. [Updates](#Updates)
 8. [Updates you can expect](#Updates-you-can-expect)
