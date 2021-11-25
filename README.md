@@ -15,7 +15,7 @@
 5. [Indicators Available](#Indicators-as-of-Version-1-of-the-web-application.)
 6. [Requirements](#Requirements)
 7. [Updates](#Updates)
-8. [Updates you can expect](#Updatates-you-can-expect)
+8. [Updates you can expect](#Updates-you-can-expect)
 
 
 ## About the Web app. 
